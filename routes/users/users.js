@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
-const auth = require('../../middleware/auth')
+const auth = require('../../middlewares/auth')
 const User = require("../../models/Users");
 
 const e = require("express");
@@ -109,17 +109,21 @@ router.get("/:id",auth, async (req, res, next) => {
 router.put("/:id",auth, async (req, res, next) => {
 	try {
 		const { id } = req.params;
-
+    const { firstName, lastName } = req.body;
     const oldUser = await User.findOne({
       _id: id,
     });
 
 
-		if (!oldUser)
-			return res.status(401).json({ message: "invalid credentials" });
+		if (!oldUser) return res.status(401).json({ message: "invalid credentials" });
 		const Newuser = await User.updateOne({
 			_id: id,
-		});
+		}, {
+      $set: {
+        firstName,
+        lastName
+      }
+    });
 		res.status(200).json({ message: "Update successfuly" });
 	} catch (error) {
 		next(error);
