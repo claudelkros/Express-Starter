@@ -26,11 +26,9 @@ connection.once('open', () => {
 
 
 const userRouter = require('./routes/users/users');
-const stationRouter = require('./routes/stations/stations');
 
 
 app.use('/authentication', userRouter);
-app.use('/stations', stationRouter);
 
 
 app.listen(PORT, function () {
